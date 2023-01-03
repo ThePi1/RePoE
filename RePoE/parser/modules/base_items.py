@@ -175,24 +175,26 @@ ITEM_CLASS_BLACKLIST = {
     "HeistObjective",
     "HiddenItem",
     "ArchnemesisMod",
+    "Relic",
+    "SanctumSpecialRelic"
 }
 
 
 class base_items(Parser_Module):
     @staticmethod
     def write(file_system, data_path, relational_reader, translation_file_cache, ot_file_cache):
-        attribute_requirements = _create_default_dict(relational_reader["ComponentAttributeRequirements.dat"])
-        armour_types = _create_default_dict(relational_reader["ArmourTypes.dat"])
-        shield_types = _create_default_dict(relational_reader["ShieldTypes.dat"])
-        flask_types = _create_default_dict(relational_reader["Flasks.dat"])
-        flask_charges = _create_default_dict(relational_reader["ComponentCharges.dat"])
-        weapon_types = _create_default_dict(relational_reader["WeaponTypes.dat"])
-        currency_type = _create_default_dict(relational_reader["CurrencyItems.dat"])
+        attribute_requirements = _create_default_dict(relational_reader["ComponentAttributeRequirements.dat64"])
+        armour_types = _create_default_dict(relational_reader["ArmourTypes.dat64"])
+        shield_types = _create_default_dict(relational_reader["ShieldTypes.dat64"])
+        flask_types = _create_default_dict(relational_reader["Flasks.dat64"])
+        flask_charges = _create_default_dict(relational_reader["ComponentCharges.dat64"])
+        weapon_types = _create_default_dict(relational_reader["WeaponTypes.dat64"])
+        currency_type = _create_default_dict(relational_reader["CurrencyItems.dat64"])
         # Not covered here: SkillGems.dat (see gems.py), Essences.dat (see essences.py)
 
         root = {}
         skipped_item_classes = set()
-        for item in relational_reader["BaseItemTypes.dat"]:
+        for item in relational_reader["BaseItemTypes.dat64"]:
 
             if item["ItemClassesKey"]["Id"] in ITEM_CLASS_BLACKLIST:
                 skipped_item_classes.add(item["ItemClassesKey"]["Id"])
@@ -202,7 +204,9 @@ class base_items(Parser_Module):
             else:
                 raise ValueError(f"Unknown item class, not in whitelist or blacklist: {item['ItemClassesKey']['Id']}")
 
-            inherited_tags = list(ot_file_cache[item["InheritsFrom"] + ".ot"]["Base"]["tag"])
+            #TODO: seems broken
+            #inherited_tags = list(ot_file_cache[item["InheritsFrom"] + ".ot"]["Base"]["tag"])
+            inherited_tags = []
             item_id = item["Id"]
             properties = {}
             _convert_armour_properties(armour_types[item_id], properties)
@@ -220,13 +224,13 @@ class base_items(Parser_Module):
                 "implicits": [mod["Id"] for mod in item["Implicit_ModsKeys"]],
                 "tags": [tag["Id"] for tag in item["TagsKeys"]] + inherited_tags,
                 "visual_identity": {
-                    "id": item["ItemVisualIdentity"]["Id"],
-                    "dds_file": item["ItemVisualIdentity"]["DDSFile"],
+                    "id": item["ItemVisualIdentityKey"]["Id"],
+                    "dds_file": item["ItemVisualIdentityKey"]["DDSFile"],
                 },
                 "requirements": _convert_requirements(attribute_requirements[item_id], item["DropLevel"]),
                 "properties": properties,
                 "release_state": get_release_state(item_id).name,
-                "domain": item["ModDomain"].name.lower(),
+                "domain": item["ModDomainsKey"].name.lower(),
             }
             _convert_flask_buff(flask_types[item_id], root[item_id])
 

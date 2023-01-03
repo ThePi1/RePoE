@@ -30,7 +30,7 @@ class crafting_bench_options(Parser_Module):
     @staticmethod
     def write(file_system, data_path, relational_reader, translation_file_cache, ot_file_cache):
         root = []
-        for row in relational_reader["CraftingBenchOptions.dat"]:
+        for row in relational_reader["CraftingBenchOptions.dat64"]:
             if row["RequiredLevel"] > 100 or row["IsDisabled"]:
                 continue
             item_class_row_lists = [categories["ItemClasses"] for categories in row["CraftingItemClassCategories"]]

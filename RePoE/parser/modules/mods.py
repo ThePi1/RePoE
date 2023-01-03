@@ -57,7 +57,7 @@ class mods(Parser_Module):
     @staticmethod
     def write(file_system, data_path, relational_reader, translation_file_cache, ot_file_cache):
         root = {}
-        for mod in relational_reader["Mods.dat"]:
+        for mod in relational_reader["Mods.dat64"]:
             domain = MOD_DOMAIN_FIX.get(mod["Id"], mod["Domain"])
             obj = {
                 "required_level": mod["Level"],
