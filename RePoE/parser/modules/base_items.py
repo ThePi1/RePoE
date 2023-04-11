@@ -153,6 +153,7 @@ ITEM_CLASS_WHITELIST = {
     "HeistEquipmentUtility",
     "HeistEquipmentReward",
     "MemoryLine",
+    "Breachstone",
 }
 
 ITEM_CLASS_BLACKLIST = {
@@ -176,7 +177,9 @@ ITEM_CLASS_BLACKLIST = {
     "HiddenItem",
     "ArchnemesisMod",
     "Relic",
-    "SanctumSpecialRelic"
+    "SanctumSpecialRelic",
+    "GiftBox",
+    "VaultKey",
 }
 
 
